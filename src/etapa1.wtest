@@ -1,0 +1,59 @@
+import profesionales.*
+import empresas.*
+
+describe "Testing de etapa1"{
+	
+	const sanMartin = new Universidad(provincia="BuenosAires",honorarioRecomendable=3500)
+	const rosario = new Universidad(provincia="SantaFe",honorarioRecomendable=2800)
+	const corrientes = new Universidad(provincia="Corrientes",honorarioRecomendable=4200)
+	const hurlingham = new Universidad(provincia="BuenosAires",honorarioRecomendable=8800)
+	
+	const juana = new ProfesionalVinculado(universidad=rosario)
+	const melina = new ProfesionalAsociado(universidad=corrientes)
+	const rocio = new ProfesionalLibre(universidad=hurlingham,honorariosPorHora=5000,provincias =#{"Cordoba","Santa Fe","Buenos Aires"})
+	const luciana = new ProfesionalLibre(universidad=rosario,honorariosPorHora=3200,provincias =#{"Entre Rios","Santa Fe"})
+	
+	const empresa = new Empresa(honorarioReferencia=3500)
+    
+    method initialize(){
+    	empresa.agregarProfesional(juana)
+    	empresa.agregarProfesional(melina)
+    	empresa.agregarProfesional(rocio)
+    	empresa.agregarProfesional(luciana)
+    }
+    
+    test "dos estudiaron en univ rosario"{
+    	assert.equals(2,empresa.cantProfesionalesQueEstudiaronEnUniv(rosario))
+    }
+    
+    test "uno estudio en hurlingam"{
+    	assert.equals(1,empresa.cantProfesionalesQueEstudiaronEnUniv(hurlingham))
+    }
+    
+    test "cero estudio en sanmartin"{
+    	assert.equals(0,empresa.cantProfesionalesQueEstudiaronEnUniv(sanMartin))
+    }
+    
+    test "la unica profesional mas cara es Rocio"{
+    	assert.equals(#{rocio},empresa.profesionalesCaros())
+    }
+    
+    test "son universidades formadores, rosario, corrientes y hurlingam"{
+    	assert.equals(#{rosario,corrientes,hurlingham},empresa.universidadesFormadoras())
+    }
+    
+    test "es profesional mas baratoajuana"{
+    	assert.equals(juana,empresa.profesionalMasBarato())
+    	
+    }
+    
+    test "es una empresa acotada"{
+    	assert.that(empresa.esDeGenteAcotada())
+    }
+    
+    test "agrego a luciana dos proovincias, deja de ser acotada"{
+    	luciana.agregarProvincia("Corrientes")
+    	luciana.agregarProvincia("Misiones")
+    	assert.notThat(empresa.esDeGenteAcotada())
+    }
+}
